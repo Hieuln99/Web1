@@ -1,0 +1,137 @@
+﻿@model IEnumerable<Web1.Models.Trainer>
+@{
+    ViewBag.Title = "TrainerView";
+    Layout = "~/Views/Shared/FormHome.cshtml";
+}
+
+<br />
+<h1 align="center">Trainer Manager</h1>
+
+<div class="style">
+    @if (TempData["message"] != null)
+    {
+        ViewBag.Message = TempData["message"];
+    }
+    @Html.Partial("_Message")
+</div>
+
+
+<table class="style" border="1">
+   
+    <tr>
+        <td class="td"><b>@Html.DisplayNameFor(model => model.Name)</b></td>
+        <td class="td"><b>@Html.DisplayNameFor(model => model.Workplace)</b></td>
+        <td class="td"><b>@Html.DisplayNameFor(model => model.Email)</b></td>
+        <td class="td"><b>@Html.DisplayNameFor(model => model.Phonenumber)</b></td>
+        <td class="td"></td>
+        <td class="td"></td>
+    </tr>
+    @foreach (var b in Model)
+    {
+<tr>
+    <td class="td">@Html.DisplayFor(model => b.Name)</td>
+    <td class="td">@Html.DisplayFor(model => b.Workplace)</td>
+    <td class="td">@Html.DisplayFor(model => b.Email)</td>
+    <td class="td">@Html.DisplayFor(model => b.Phonenumber)</td>
+    <td class="td">
+        <a type="button" class="btn btn-outline-info"
+           href="@Url.Action("ViewCourse",new { id = b.id})">View</a>
+    </td>
+
+    <td class="td">
+        <a type="button" class="btn btn-success"
+           href="@Url.Action("TrainerEdit",new {id =b.id})">Edit</a>
+    </td>
+    <td class="td">
+        <a type="button" class="btn btn-danger"
+           data-trainer="@String.Format("{0}|{1}",
+                                             b.ToSeparatedString("|"),
+                                             Url.Action("CourseDelete",new { id = b.id}))"
+           data-target="#delete" data-toggle="modal">Delete</a>
+    </td>
+</tr>
+
+    }
+</table>
+
+@section alertdialog
+    {
+    <div class="modal fade" tabindex="-1" id="delete" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+
+                <form id="deleteForm" method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Deleting A Trainer</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="maxwith">
+                            <tr style="height: 40px">
+                                <th scope="col" width="20%">Name</th>
+                            </tr>
+                            <tr>
+                                <th><input type="text" class="form-control" id="name" /></th>
+                            </tr>
+                            <tr style="height: 40px">
+                                <th scope="col" width="20%">Type</th>
+                            </tr>
+                            <tr>
+                                <th><input type="text" class="form-control" id="type" /></th>
+                            </tr>
+                            <tr style="height: 40px">
+                                <th scope="col" width="20%">Work Place</th>
+                            </tr>
+                            <tr>
+                                <th><input type="text" class="form-control" id="workplace" /></th>
+                            </tr>
+                            <tr style="height: 40px">
+                                <th scope="col" width="20%">Phone Number</th>
+                            </tr>
+                            <tr>
+                                <th><input type="text" class="form-control" id="phonenumber" /></th>
+                            </tr>
+                            <tr style="height: 40px">
+                                <th scope="col" width="20%">Email</th>
+                            </tr>
+                            <tr>
+                                <th><input type="text" class="form-control" id="email" /></th>
+                            </tr>
+
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <input type="submit" class="btn btn-primary" value="Delete" />
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+}
+
+@section scripts
+    {
+    <script type="text/javascript">
+        $('document').ready(function () {
+            $('a[data-trainer]').on('click', function (evt) {
+                let d = $(this).attr('data-trainer').split("|");
+                console.log(d);
+                $('#id').attr('value', d[0]);
+                $('#name').attr('value', d[1]);
+                $('#type').attr('value', d[2]);
+                $('#workplace').attr('value', d[3]);
+                $('#phonenumber').attr('value', d[4]);
+                $('#email').attr('value', d[5]);
+
+                $('#deleteForm').attr('action', d[4]);
+            });
+        });
+
+    </script>
+}
+

@@ -1,0 +1,48 @@
+﻿@model Web1.Models.Trainer
+@{
+    ViewBag.Title = "TrainerAdd";
+    Layout = "~/Views/Shared/FormHome.cshtml";
+}
+
+@{
+    List<int> selectedids = new List<int>();
+    if(TempData["courseIds"] != null)
+    {
+        selectedids = TempData["courseIds"].ToString().Split(',')
+        .Select(id => Int32.Parse(id)).ToList();
+    }
+}
+
+<div class="container">
+    <h1 class="display-4">New Trainer</h1>
+    @if (!ViewData.ModelState.IsValid)
+    {
+        @Html.ValidationSummary(false,"Error", new {@class = "text-danger"})
+    }
+
+    @using (Html.BeginForm(FormMethod.Post))
+    {
+        @Html.Partial("_Formcreate1")
+
+        ////course
+        <div class="form-group">
+            <label class="font-weight-bold mr-3">
+                Courses
+            </label>
+            <br />
+            @foreach (var r in ViewBag.Course)
+            {
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox"
+                           value="@r.id" id="@r.Name" name="courseIds[]"
+                           @(selectedids.Contains(r.id) ? "checked" : string.Empty) />
+                    <label class="form-check-label" for="@r.Name">
+                        @r.Name
+                    </label>
+                </div>
+            }
+        </div>
+
+        <button type="submit" class="btn btn-dark">Submit</button>
+    }
+</div>

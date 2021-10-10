@@ -1,0 +1,23 @@
+﻿@model Web1.Models.Course
+@{
+    ViewBag.Title = "CourseEdit";
+    Layout = "~/Views/Shared/FormHome.cshtml";
+}
+
+<div class="container">
+    <h1 class="display-4">New Course</h1>
+    @if (!ViewData.ModelState.IsValid)
+    {
+        @Html.ValidationSummary(false, "Error", new { @class = "text-danger" })
+    }
+
+    @using (Html.BeginForm(FormMethod.Post))
+    {
+        @Html.HiddenFor(m => m.id)
+
+        @Html.Partial("_Formcreate")
+
+        <button type="submit" class="btn btn-dark">Submit</button>
+    }
+</div>
+
